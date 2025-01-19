@@ -21,3 +21,12 @@ model User {
   phoneNo   Int
   createdAt DateTime @default(now())
 }
+
+model Admin {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String
+  password  String
+  username  String
+  createdAt DateTime @default(now())
+}
