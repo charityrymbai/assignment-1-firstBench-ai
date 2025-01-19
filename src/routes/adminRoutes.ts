@@ -1,7 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import express from 'express';
 import { AdminSchema } from '../schema/schema';
-import { parseArgs } from 'util';
 
 const adminRouter = express.Router();
 
@@ -15,7 +14,7 @@ adminRouter.post("/create", async (req, res) => {
     const parsedBody = AdminSchema.safeParse(body);
 
     if(!parsedBody.success){
-        return res.status(400).json(parsedBody.error.errors);
+        return res.status(400).json({error: parsedBody.error.errors});
     }
 
     const prisma = new PrismaClient();
@@ -24,7 +23,7 @@ adminRouter.post("/create", async (req, res) => {
         const admin = await prisma.admin.create({
             data: parsedBody.data
         });
-        return res.status(200).json(admin);
+        return res.status(200).json({message: "admin created successfully"});
     }catch{
         return res.status(500).json({message: "Internal Server Error"});
     }finally{
@@ -43,7 +42,7 @@ adminRouter.get("/get-admin/:id", async (req, res) => {
                 id: params.id,
             },
         });
-        return res.status(200).json(admin);
+        return res.status(200).json({message: "admin fetched successfully", data: admin});
     }catch{
         return res.status(500).json({message: "Internal Server Error"});
     }finally{
@@ -57,7 +56,7 @@ adminRouter.get("/getAllUsers", async (req, res) => {
 
     try{
         const users = await prisma.user.findMany();
-        return res.status(200).json(users);
+        return res.status(200).json({message: "users fetched successfully", data: users});
     }catch{
         return res.status(500).json({message: "Internal Server Error"});
     }finally{
