@@ -20,6 +20,8 @@ model User {
   password  String
   phoneNo   Int
   createdAt DateTime  @default(now())
+  deleted   Boolean   @default(false)
+  deletedAt DateTime?
 }
 
 model Admin {
